@@ -7,9 +7,12 @@ import numpy as np
 from pathlib import Path
 import scipy.spatial as ssp
 import config
+import donuts
 
 
-path = str(os.getcwd()) + "/dl/"
+file_dir = Path(__file__).parent.resolve()
+cwd = os.getcwd()
+path = str(file_dir) + "/dl/"
 annot_dl_path = path + "annotations/"
 vector_path = path + "vectors/"
 annotations = glob.glob(annot_dl_path+"/*.*")
@@ -28,10 +31,12 @@ for ann in annotations:
             coords = prop.coords
             if prop.area < 100:
                 continue
-            ch = ssp.ConvexHull(coords)
-            points = ch.points[ch.vertices].astype(np.uint16)
-            points = np.divide(points,config.IMG_SIZE)
-            points = np.append(points,points[0]) #add the first point as the last to make a complete polygon
+            donut = donuts.generate_contour(prop.image)
+            x_offs = prop.bbox[0]
+            y_offs = prop.bbox[1]
+            points = np.add(donut,(x_offs,y_offs))
+            points = np.divide(points,config.IMG_SIZE+1)
+            #points = np.append(points,points[0]) #add the first point as the last to make a complete polygon
             targets_file.write("0 ")
             np.savetxt(targets_file,points, newline=' ', fmt='%1.3f')
             targets_file.write("\n")
