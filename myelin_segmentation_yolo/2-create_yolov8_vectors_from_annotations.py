@@ -22,7 +22,6 @@ for v in old_vectors:
 
 for ann in annotations:
     im = np.asarray(Image.open(ann)).swapaxes(0,1)
-
     props = measure.regionprops(label_image=im)
     with open(vector_path + str(Path(ann).stem) + '.txt',"x") as targets_file:
         for prop in props:
