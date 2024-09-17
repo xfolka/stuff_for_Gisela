@@ -11,12 +11,12 @@ import donuts
 
 
 
-#TODO: read path from confg? And if it does not exist, do magic below...
+#TODO: read path from confg? And if it does not exist, do magic below
 # file_dir = Path(__file__).parent.resolve()
 # base = file_dir
 cwd = os.getcwd()
 base = cwd
-path = str(fbase) + "/dl/"
+path = str(base) + "/dl/"
 annot_dl_path = path + "annotations/"
 vector_path = path + "vectors/"
 annotations = glob.glob(annot_dl_path+"/*.*")
