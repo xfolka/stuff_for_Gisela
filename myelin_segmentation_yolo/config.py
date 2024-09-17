@@ -12,4 +12,12 @@ CLEAR_OUTPUT_DIR = False
 
 ORG_ID = os.getenv("ORG_ID")
 WK_TOKEN = os.getenv("WK_TOKEN")
+
+TRAINING_DATASET_FILE = "datasets/dataset.yaml"
+TRAINING_EPOCHS = 10
+
+MODEL_SAVE_FILE_NAME = "latest_model.pt"
+
+TEST_DATA_DIR = "dl/test_data/"
+TEST_IMAGE_RESULT_FILE_NAME = "result.png"
         
