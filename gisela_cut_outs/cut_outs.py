@@ -38,19 +38,22 @@ if config.CLEAR_OUTPUT_DIR:
     for f in files:
         os.remove(f)
 
-for wkid in wk_id_list:
+#for wkid in wk_id_list:
 
-    ANNOTATION_ID = wkid
+#    ANNOTATION_ID = wkid
 
-    with wk.webknossos_context(token=config.WK_TOKEN):
-        annotations = wk.Annotation.open_as_remote_dataset(annotation_id_or_url=ANNOTATION_ID)
-        lbl_layers = annotations.get_segmentation_layers()
+with wk.webknossos_context(token=config.WK_TOKEN):
+#        annotations = wk.Annotation.open_as_remote_dataset(annotation_id_or_url=ANNOTATION_ID)
 
-        label_indices = {i.name : l for l,i in enumerate(lbl_layers)}
+    rds = wk.RemoteDataset.get_remote_datasets(config.ORG_ID)
+    for entry in rds.entries:
+        #lbl_layers = annotations.get_segmentation_layers()
 
-        DATASET_NAME = annotations._properties.id['name']
-        print(f"*********************** using dataset: {DATASET_NAME} *********************")
-        ds = wk.Dataset.open_remote(dataset_name_or_url=DATASET_NAME, organization_id=config.ORG_ID)
+        #label_indices = {i.name : l for l,i in enumerate(lbl_layers)}
+
+        #DATASET_NAME = annotations._properties.id['name']
+        print(f"*********************** using dataset: {entry} *********************")
+        ds = wk.Dataset.open_remote(dataset_name_or_url=entry, organization_id=config.ORG_ID)
         img_layer = ds.get_color_layers()
         assert len(img_layer) == 1, "more than an image, this is unexpected for this project"
         first_layer = img_layer[0]    
@@ -146,14 +149,14 @@ for wkid in wk_id_list:
             
             dimension_order = "ZYX"
             writer = OMETIFFWriter(
-                    fpath=img_dl_path + f"{wkid}-{i}.ome.tiff",
+                    fpath=img_dl_path + f"{entry}-{i}.ome.tiff",
                     dimension_order=dimension_order,
                     array=img_cut[0,:,:,:],
                     metadata=metadata_dict,
                     
                     explicit_tiffdata=False)
             writer.write()
-            f = open(img_dl_path + f"{wkid}-{i}-data.json", "x")
+            f = open(img_dl_path + f"{entry}-{i}-data.json", "x")
             f.write(json.dumps(extra_data))
             f.close()
             # mdata = {
@@ -173,7 +176,7 @@ for wkid in wk_id_list:
 
         # img_data = first_layer.get_mag(pSize.MAG).read()
 
-        # lbl_data = lbl_layers[label_indices["Myelin"]].get_mag(pSize.MAG).read()
+            # lbl_data = lbl_layers[label_indices["Myelin"]].get_mag(pSize.MAG).read()
 
 #    unique_lbls = np.unique(lbl_data)
 
