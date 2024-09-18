@@ -20,4 +20,4 @@ model = YOLO(str(base) + "/" + config.MODEL_SAVE_FILE_NAME)
 results = model(test_image,task="segment", show_boxes=False,show_labels=False,imgsz=config.IMG_SIZE)
 segments = results[0].masks
 results[0].show()
-results[0].save(str(base) + "/" + config.TEST_IMAGE_RESULT_FILE_NAME,)
+results[0].save(str(base) + "/" + config.TEST_IMAGE_RESULT_FILE_NAME)
